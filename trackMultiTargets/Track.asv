@@ -1,0 +1,26 @@
+% Author: Shen Kailun
+% Date  : 2023-11-14
+classdef Track
+    %航迹 类
+    properties
+        X %状态向量
+        P %误差协方差矩阵
+        score %航迹得分
+        connectionStatus %关联状态
+    end
+    
+    methods
+        function obj = Track(X, P)
+            %TRACK 构造此类的实例
+            %   此处显示详细说明
+            obj.X = X;
+        end
+        
+        function outputArg = method1(obj,inputArg)
+            %METHOD1 此处显示有关此方法的摘要
+            %   此处显示详细说明
+            outputArg = obj.Property1 + inputArg;
+        end
+    end
+end
+
