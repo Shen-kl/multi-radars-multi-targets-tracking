@@ -1,19 +1,17 @@
 % Author: Shen Kailun
-% Date  : 2023-11-14
-classdef Track
-    %航迹 类
+% Date  : 2023-11-15
+classdef At_Location_Plot_Track
     properties
-        X %状态向量
-        P %误差协方差矩阵
-        score %航迹得分
-        connectionStatus %关联状态
+        plot_track_num
+        plot_track_index
     end
     
     methods
-        function obj = Track(X, P)
-            %TRACK 构造此类的实例
+        function obj = At_Location_Plot_Track()
+            %ATT_LOCATION_PLOT_TRACK 构造此类的实例
             %   此处显示详细说明
-            obj.X = X;
+            obj.plot_track_num = 0;
+            obj.plot_track_index = [];
         end
         
         function outputArg = method1(obj,inputArg)

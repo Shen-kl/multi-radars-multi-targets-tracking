@@ -7,7 +7,7 @@ s = sprintf("====Simulate_Targets====");
 disp(s);
 
 %加载目标轨迹
-load("target.mat");
+load("target4.mat");
 target_num = 4;%要加载的目标数量
 
 for index = 1 : target_num

@@ -5,13 +5,14 @@
 %功能： 雷达跟踪
 s = sprintf("====Simulate_Track====");
 disp(s);
+
 for radar_index = 1 : radar_num    
     %分区
-    zone(radar_param(radar_index));
+    radar(radar_index) = zone(radar(radar_index));
     %航迹处理
-    track_process;
+    radar(radar_index) = track_process_GNN(radar(radar_index));
     %航迹起始
-    track_init;
+    radar(radar_index) = track_init(radar(radar_index));
     %航迹管理
-    track_manage;
+    radar(radar_index) = track_manage(radar(radar_index));
 end
