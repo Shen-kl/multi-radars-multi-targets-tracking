@@ -26,7 +26,7 @@ function [radar] = zone(radar)
                 radar.detection_distance_range(1),...
                 radar.detection_azimuth_range(1));       
         else
-            radar.track_set(track_index).track_property = 2;
+            radar.track_set(track_index).track_property = 2;%Èô³¬³öÌ½²â·¶Î§ ²»ÔÙ¼ÌĞø¸ú×Ù
         end
     end
     
