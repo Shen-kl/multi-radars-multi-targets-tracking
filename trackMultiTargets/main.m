@@ -19,7 +19,7 @@ for frame_index = 1 : frame_max
     Simulate_Track;
     
     %ÈÚºÏ
-    Simulate_Fusion;
+%     Simulate_Fusion;
     
     %»æÍ¼
     Simulate_Plot;
