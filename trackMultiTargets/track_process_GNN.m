@@ -22,18 +22,18 @@ function [radar] = track_process_GNN(radar)
     end
     
     if ~isempty(clusterSet) %若当前存在非终结航迹
-        plot_track_index_set = [];
-        for i = 1 :length(locSet) %查找同分区以及相邻分区的点迹
-            for j =1:radar.At_Location_Plot_Track(locSet(i)).plot_track_num
-                index = radar.At_Location_Plot_Track(locSet(i)).plot_track_index(j);
-                if radar.plot_track_set(index).connection_status == 0%未被使用过
-                    plot_track_index_set = [plot_track_index_set index];
-                end
-            end
-        end
-        if ~isempty(plot_track_index_set) %若当前存在点迹
+%         plot_track_index_set = [];
+%         for i = 1 :length(locSet) %查找同分区以及相邻分区的点迹
+%             for j =1:radar.At_Location_Plot_Track(locSet(i)).plot_track_num
+%                 index = radar.At_Location_Plot_Track(locSet(i)).plot_track_index(j);
+%                 if radar.plot_track_set(index).connection_status == 0%未被使用过
+%                     plot_track_index_set = [plot_track_index_set index];
+%                 end
+%             end
+%         end
+        if radar.plot_track_num ~= 0 %若当前存在点迹
             plot_track_index_set = linspace(1,radar.plot_track_num,radar.plot_track_num);
-            [costMatrix,flagMatrix] = radar.calCostMatrix(clusterSet, plot_track_index_set);
+            [costMatrix,flagMatrix] = radar.calCostMatrix(clusterSet, plot_track_index_set);%计算代价矩阵 代价矩阵中存储统计距离
             [row ,loc] = linear_sum_assignment(costMatrix);
 
             for i =1:length(row) 
@@ -56,12 +56,12 @@ function [radar] = track_process_GNN(radar)
                 end
             end
         else
-    for track_index =1 : radar.track_num
-        if radar.track_set(track_index).track_property ~=2%判断是否是终结航迹
-            radar.track_set(track_index).connection_status=0;
-            radar.track_set(track_index).track_quality = radar.track_set(track_index).track_quality - 3 ;
-        end
-    end            
+            for track_index =1 : radar.track_num
+                if radar.track_set(track_index).track_property ~=2%判断是否是终结航迹
+                    radar.track_set(track_index).connection_status=0;
+                    radar.track_set(track_index).track_quality = radar.track_set(track_index).track_quality - 3 ;
+                end
+            end            
         end
     end
 end

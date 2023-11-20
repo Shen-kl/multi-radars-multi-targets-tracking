@@ -16,7 +16,7 @@ for radar_index = 1 : radar_num
 %                 plot(measurement(5),measurement(6),'*');
 %                 set (gcf,'position', [1500 300 500 500]);
                 
-                %判断是否在雷达观测范围内
+                %判断是否在雷达观测范围内 坐标原点转换至雷达所在坐标
                 [X,Y,Z] = enu2ecef(measurement(5),measurement(6),measurement(7),...
                     origin_latitude,origin_longitude,0,wgs84Ellipsoid);
                 [xEast,yNorth,zUp] = ecef2enu(X,Y,Z,...

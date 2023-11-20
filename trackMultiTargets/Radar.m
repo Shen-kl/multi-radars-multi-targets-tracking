@@ -35,6 +35,7 @@ classdef Radar
         At_Location_Plot_Track
         track_index_set %可用批号
         head_index_set %可用点迹标号
+        report %上报航迹
     end
     
     methods

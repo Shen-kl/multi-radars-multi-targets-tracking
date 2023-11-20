@@ -1,3 +1,5 @@
+% Author: Shen Kailun
+% Date  : 2023-11-19
 function [ mu,measureNoiseCov] = CalMeasurementNoiseCov(R,A,E,rangeNoise,aziNoise,eleNoise)
 %函数功能：计算极坐标系转换至直角坐标系下时，观测误差矩阵的转换 
 %输入： R 量测径向距离

@@ -37,7 +37,11 @@ xlabel('m');
 ylabel('m');
 
 %À×´ï Ä¿±ê
-color = ["g","k"];
+marker = ["go","ko"];
+marker_plot = ["g*","k*"];
+legend_set_ori = {'radar1-track','radar1-plot-track','radar2-track','radar2-plot-track','fusion-track'};
+handle_set = [];
+legend_set = [];
 for radar_index = 1 : radar_num
     for track_index = 1 : radar(radar_index).track_num
         [X,Y,Z] = enu2ecef(radar(radar_index).track_set(track_index).X(1,:),...
@@ -50,9 +54,13 @@ for radar_index = 1 : radar_num
             origin_latitude,...
             origin_longitude,...
             0,wgs84Ellipsoid);
-        plot(xEast,...
-            yNorth,color(radar_index));
-        text(xEast(end),yNorth(end),num2str(radar(radar_index).track_set(track_index).track_index));       
+        track_handle(radar_index) = plot(xEast,...
+            yNorth,marker(radar_index));
+        text(xEast(end),yNorth(end),num2str(radar(radar_index).track_set(track_index).track_index)); 
+    end
+    if radar(radar_index).track_num > 0
+        handle_set = [handle_set track_handle(radar_index)];
+        legend_set = [legend_set legend_set_ori(2* (radar_index - 1)+ 1)];
     end
     for track_index = 1 : radar(radar_index).plot_track_num
         [X,Y,Z] = enu2ecef(radar(radar_index).plot_track_set(track_index).X(1,:),...
@@ -65,11 +73,29 @@ for radar_index = 1 : radar_num
             origin_latitude,...
             origin_longitude,...
             0,wgs84Ellipsoid);        
-        plot(xEast,...
-            yNorth,strcat(color(radar_index),"*"));
+        plot_track_handle(radar_index) = plot(xEast,...
+            yNorth,marker_plot(radar_index));
+    end       
+    if radar(radar_index).plot_track_num > 0
+        handle_set = [handle_set plot_track_handle(radar_index)];
+        legend_set = [legend_set legend_set_ori(2 * radar_index)];
     end    
 end
-hold off;
+
+for track_fusion_index = 1 : fusion.track_fusion_num   
+    track_fusion_handle = plot(fusion.track_fusion_set(track_fusion_index).X(1,:),...
+        fusion.track_fusion_set(track_fusion_index).X(4,:),"r>");
+    text(fusion.track_fusion_set(track_fusion_index).X(1,end),...
+        fusion.track_fusion_set(track_fusion_index).X(4,end),...
+    num2str(fusion.track_fusion_set(track_fusion_index).track_fusion_index));    
+end  
+if fusion.track_fusion_num > 0
+    handle_set = [handle_set track_fusion_handle];
+    legend_set = [legend_set legend_set_ori(5)];
+end    
+legend(handle_set,...
+    legend_set);
+% hold off;
 % figure(1);
 % hold on;
 % for track_index = 1 : radar(1).track_num

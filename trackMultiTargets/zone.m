@@ -3,6 +3,7 @@
 function [radar] = zone(radar)
 %函数功能： 对航迹与点迹进行分区，便于关联
     %航迹预测 分区
+    radar.report = [];
     for track_index = 1 : radar.track_num
         [X_predict, P_predict] = radar.tracker.KalmanPredict(...
             radar.track_set(track_index).X(:,end), radar.track_set(track_index).P);

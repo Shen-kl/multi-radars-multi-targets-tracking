@@ -1,3 +1,5 @@
+% Author: Shen Kailun
+% Date  : 2023-11-19
 function [row ,loc] = linear_sum_assignment(cost_matrix)
 %函数功能：使用匈牙利算法解决最优指派问题
 %参数说明 cost_matrix 代价矩阵

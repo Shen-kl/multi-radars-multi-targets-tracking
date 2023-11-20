@@ -76,7 +76,7 @@ for index = 1 : radar_num
             W=[50,0.3*pi/180,0.3*pi/180]';%量测噪声矩阵 x y z轴
             R=[20^2 0 0;0 20^2 0;0 0 20^2];%
 
-            nvar=1e2;%系统噪声
+            nvar=1e1;%过程噪声
             Q=nvar*[(T^5/20) (T^4/8)  (T^3/6) zeros(1,6);...
                         (T^4/8) (T^3/2) (T^2/2) zeros(1,6);
                         (T^3/6) (T^2/2) T zeros(1,6);
@@ -98,13 +98,39 @@ for index = 1 : radar_num
 
 end
 
-%% 航迹号分配
-TarTrackIndex=zeros(1,1000);%目标航迹号
-for i=1:1000
-    TarTrackIndex(i)=i;
-end
+%% 融合初始化
+fusion = Fusion('KF',0.2,16,5);
+switch fusion.tracker_method % 可以扩充
+    case 'KF'
+        T = radar(index).T;
+        F=[1 T 1/2*T^2 0 0 0 0 0 0 ;...
+            0 1 T 0 0 0 0 0 0;...
+            0 0 1 0 0 0 0 0 0;...
+            0 0 0 1 T 1/2*T^2 0 0 0;...
+            0 0 0 0 1 T 0 0 0;...
+            0 0 0 0 0 1 0 0 0;...
+            0 0 0 0 0 0 1 T T^2/2;...
+            0 0 0 0 0 0 0 1 T;...
+            0 0 0 0 0 0 0 0 1];%状态转移矩阵
+        W=[50,0.3*pi/180,0.3*pi/180]';%量测噪声矩阵 x y z轴
+        R=[20^2 0 0;0 20^2 0;0 0 20^2];%
 
-HeadIndex=zeros(1,1000);%航迹头标号
-for i=1:1000
-    HeadIndex(i)=i;
+        nvar=1e1;%过程噪声
+        Q=nvar*[(T^5/20) (T^4/8)  (T^3/6) zeros(1,6);...
+                    (T^4/8) (T^3/2) (T^2/2) zeros(1,6);
+                    (T^3/6) (T^2/2) T zeros(1,6);
+                zeros(1,3) (T^5/20) (T^4/8)  (T^3/6) zeros(1,3);
+                zeros(1,3) (T^4/8) (T^3/2)  (T^2/2) zeros(1,3);
+                zeros(1,3) (T^3/6) (T^2/2) T zeros(1,3);...
+                zeros(1,6) (T^5/20) (T^4/8)  (T^3/6);
+                zeros(1,6) (T^4/8) (T^3/2) (T^2/2);
+                zeros(1,6) (T^3/6) (T^2/2) T];%过程噪声  
+       H=[1 0 0 0 0 0 0 0 0 ;
+           0 0 0 1 0 0 0 0 0 ;
+           0 0 0 0 0 0 1 0 0 ];%观测矩阵
+       fusion.tracker =  KalmanFilter(F, H, Q, R);
+    case 'EKF'
+
+    case 'UKF'    
+
 end
