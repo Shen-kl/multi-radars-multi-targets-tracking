@@ -95,7 +95,7 @@ if fusion.track_fusion_num > 0
 end    
 legend(handle_set,...
     legend_set);
-% hold off;
+hold off;
 % figure(1);
 % hold on;
 % for track_index = 1 : radar(1).track_num
