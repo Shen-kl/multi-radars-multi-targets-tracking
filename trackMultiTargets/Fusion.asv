@@ -99,9 +99,12 @@ classdef Fusion
         
         function [fusion_X, fusion_P] = optimalDistributedEstimationFusion(obj, system_X, system_P, radar_X, radar_P, radar_X_predict, radar_P_predict)
             %最优分布式估计融合
-            fusion_P_inv = inv(system_P) + inv(radar_P) - inv(radar_P_predict);
-            fusion_P = inv(fusion_P_inv);
-            fusion_X = fusion_P*( inv(system_P) * system_X + inv(radar_P) * radar_X - inv(radar_P_predict) * radar_X_predict);
+            W1 = radar_P * inv(system_P + radar_P);
+            I9 = eye(9);
+            W2 = I9 - W1;
+            fusion_X = W1 * system_X + W2 * radar_X(1:9);
+            fusion_P = system_P * inv(system_P + radar_P) * radar_P;
+            fusion_P_inv = inv(system_P) + inv(radar_P) - inv(radar_P_predict)
         end        
     end
 

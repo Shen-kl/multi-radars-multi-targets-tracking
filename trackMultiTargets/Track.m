@@ -4,7 +4,9 @@ classdef Track
     %航迹 类
     properties
         X %状态向量
+        X_predict %预测状态向量
         P %误差协方差矩阵
+        P_predict %预测误差协方差矩阵
         Polar_X %极坐标
         track_quality %航迹得分
         connection_status %关联状态 0：未关联 1：关联成功
@@ -20,7 +22,9 @@ classdef Track
                 X = X';
             end
             obj.X = X;
-            obj.P = P;
+            obj.P = P;        
+            obj.X_predict = X;
+            obj.P_predict = P;            
             obj.track_quality = track_quality;
             obj.connection_status = 0;
             obj.zone_index = zone_index;

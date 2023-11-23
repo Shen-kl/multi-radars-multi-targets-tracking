@@ -46,7 +46,7 @@ classdef KalmanFilter
                     0 0 0 0 0 0 0 1 T;...
                     0 0 0 0 0 0 0 0 1];%×´Ì¬×ªÒÆ¾ØÕó   
                 X_predict = F * X;
-                P_predict = F * P + F' + obj.Q;                 
+                P_predict = F * P * F' + obj.Q;                 
             else
                 T = abs(T);
                 F=[1 T 1/2*T^2 0 0 0 0 0 0 ;...
@@ -60,7 +60,7 @@ classdef KalmanFilter
                     0 0 0 0 0 0 0 0 1];%×´Ì¬×ªÒÆ¾ØÕó         
                 inv_F = inv(F);
                 X_predict = inv_F * X;
-                P_predict = inv_F * P + inv_F' + obj.Q;                
+                P_predict = inv_F * P * inv_F' + obj.Q;                
             end
 
         end        
