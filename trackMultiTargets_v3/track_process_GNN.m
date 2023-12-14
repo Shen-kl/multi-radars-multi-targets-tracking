@@ -56,6 +56,9 @@ function [radar] = track_process_GNN(radar)
                         case 'EKF'
                             [radar.track_set(track_index).X(:,end), radar.track_set(track_index).P] = radar.tracker.ExtentedKalmanUpdate...
                                 (radar.track_set(track_index).X(:,end), radar.track_set(track_index).P, radar.plot_track_set(plot_track_index).Polar_X);%扩展卡尔曼更新
+                        case 'UKF'
+                            [radar.track_set(track_index).X(:,end), radar.track_set(track_index).P] = radar.tracker.U_KalmanUpdate...
+                                (radar.track_set(track_index).X(:,end), radar.track_set(track_index).P, radar.track_set(track_index).x_forecast_sigma,radar.plot_track_set(plot_track_index).Polar_X);%无迹卡尔曼更新                            
                         case 'Singer'
                             [radar.track_set(track_index).X(:,end), radar.track_set(track_index).P] = radar.tracker.SingerUpdate...
                                 (radar.track_set(track_index).X(:,end), radar.track_set(track_index).P, radar.plot_track_set(plot_track_index).X);%Singer更新

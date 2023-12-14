@@ -12,6 +12,10 @@ function [radar] = zone(radar)
             case 'EKF'
                 [X_predict, P_predict] = radar.tracker.ExtentedKalmanPredict(...
                     radar.track_set(track_index).X(:,end), radar.track_set(track_index).P);
+            case 'UKF'
+                [X_predict, P_predict, x_forecast_sigma] = radar.tracker.U_KalmanPredict(...
+                    radar.track_set(track_index).X(:,end), radar.track_set(track_index).P);    
+                radar.track_set(track_index).x_forecast_sigma = x_forecast_sigma;
             case 'Singer'
                 [X_predict, P_predict] = radar.tracker.SingerPredict(...
                     radar.track_set(track_index).X(:,end), radar.track_set(track_index).P);
@@ -19,7 +23,9 @@ function [radar] = zone(radar)
         radar.track_set(track_index).X = [radar.track_set(track_index).X X_predict];
         radar.track_set(track_index).P = P_predict;
         radar.track_set(track_index).X_predict = X_predict;
-        radar.track_set(track_index).P_predict = P_predict;        
+        radar.track_set(track_index).P_predict = P_predict;  
+        
+        
         [az,elev,slantRange] = enu2aer(X_predict(1),X_predict(4),X_predict(7));
         if az > 180
             az = az - 360;

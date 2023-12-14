@@ -13,6 +13,7 @@ classdef Track
         track_index %批号
         zone_index
         track_property %0：滤波 1：外推 2：终结
+        x_forecast_sigma %sigma采样点
     end
     
     methods

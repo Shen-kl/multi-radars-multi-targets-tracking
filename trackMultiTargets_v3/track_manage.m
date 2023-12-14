@@ -119,7 +119,31 @@ if ~isempty(head2ConfirmedTrackSet)
                         P_1(:,:,4),P_1(:,:,5),P_1(:,:,6);
                         P_1(:,:,7),P_1(:,:,8),P_1(:,:,9)];
                 case 'Singer'
-                    P = diag([1e3,1e4,1e5 ,1e3,1e4,1e5 ,1e3,1e4,1e5]);                    
+                    P = diag([1e3,1e4,1e5 ,1e3,1e4,1e5 ,1e3,1e4,1e5]);             
+                case 'UKF'
+                    R = [50^2 0 0;0 (3*pi/180)^2 0;0 0 (3*pi/180)^2];
+                    Polar_X_0 = zeros(3,1);
+                    [Polar_X_0(2),Polar_X_0(3),Polar_X_0(1)] = enu2aer(radar.track_header_set(loc).X(1,end - 2),radar.track_header_set(loc).X(2,end - 2),radar.track_header_set(loc).X(3,end - 2));
+                    R_c_0 = error_conversion(R,Polar_X_0);
+                    Polar_X_1 = zeros(3,1);
+                    [Polar_X_1(2),Polar_X_1(3),Polar_X_1(1)] = enu2aer(radar.track_header_set(loc).X(1,end - 1),radar.track_header_set(loc).X(2,end - 1),radar.track_header_set(loc).X(3,end - 1));
+                    R_c_1 = error_conversion(R,Polar_X_1);
+                    Polar_X_2 = zeros(3,1);
+                    [Polar_X_2(2),Polar_X_2(3),Polar_X_2(1)] = enu2aer(radar.track_header_set(loc).X(1,end),radar.track_header_set(loc).X(2,end),radar.track_header_set(loc).X(3,end));
+                    R_c_2 = error_conversion(R,Polar_X_2);
+                    
+                    P_1 = zeros(3,3,9);
+                    for j = 1:3
+                        for k = 1:3
+                            P_1(:,:,(j-1)*3 + k) = [R_c_2(j,k),R_c_2(j,k)/T,R_c_2(j,k)/(T^2);
+                                R_c_2(j,k)/T,(R_c_2(j,k)+R_c_1(j,k))/(T^2),(R_c_2(j,k)+2*R_c_1(j,k))/(T^3);
+                                R_c_2(j,k)/(T^2),(R_c_2(j,k)+2*R_c_1(j,k))/(T^3),(R_c_2(j,k)+4*R_c_1(j,k)+R_c_0(j,k))/(T^4)];
+                        end
+                    end
+                    P = [P_1(:,:,1),P_1(:,:,2),P_1(:,:,3);
+                        P_1(:,:,4),P_1(:,:,5),P_1(:,:,6);
+                        P_1(:,:,7),P_1(:,:,8),P_1(:,:,9)];    
+                    P = diag([1e3,1e4,1e5 ,1e3,1e4,1e5 ,1e3,1e4,1e5]);    
             end
             radar.track_set = [radar.track_set Track(X, P, radar.track_index_set(1),...
                 radar.track_header_set(loc).zone_index,radar.track_header_set(loc).track_quality)];

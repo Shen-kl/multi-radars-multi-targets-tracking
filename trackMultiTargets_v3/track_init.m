@@ -55,6 +55,10 @@ function [radar] = track_init(radar)
                                     R_1=error_conversion(R,radar.plot_track_set(index_temp).Polar_X);
                                     R_2=error_conversion(R,tracksHead_LASTMOMENT(j).Polar_X);
                                     R_sum = R_1+R_2;
+                                case 'UKF'
+                                    R_1=error_conversion(R,radar.plot_track_set(index_temp).Polar_X);
+                                    R_2=error_conversion(R,tracksHead_LASTMOMENT(j).Polar_X);
+                                    R_sum = R_1+R_2;                                    
                             end
                             D = d'*R_sum*d;
 

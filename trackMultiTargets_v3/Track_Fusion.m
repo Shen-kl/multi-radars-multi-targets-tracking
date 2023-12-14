@@ -14,6 +14,7 @@ classdef Track_Fusion
         connection_table %关联表
         track_type % 0:与雷达1匹配上 1：与雷达2匹配上 3：与雷达1、2匹配上
         aloneCnt %孤立航迹存在计数
+        x_forecast_sigma
     end
     
     methods
